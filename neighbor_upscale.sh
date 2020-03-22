@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo enter the path to the file you would like to upscale
 read FILE_PATH
 
