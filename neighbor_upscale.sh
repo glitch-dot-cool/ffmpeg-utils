@@ -13,6 +13,23 @@ single_file () {
     ffmpeg -i $FILE_PATH -vf scale=iw*$SCALE_FACTOR:-1:flags=neighbor $OUTPUT_PATH
 }
 
+batch () {
+    echo enter the path of the directory you would like to upscale
+    read FOLDER_PATH
+
+    echo enter the factor you would like to scale the images
+    read SCALE_FACTOR
+
+    echo enter the suffix you would like to append to the upscaled images
+    read SUFFIX
+
+    for FILE in $FOLDER_PATH/*; do
+        NAME="$(basename "${FILE%.*}")"
+        EXT="${FILE##*.}"
+        ffmpeg -i "${FOLDER_PATH}/${NAME}.$EXT" -vf scale=iw*$SCALE_FACTOR:-1:flags=neighbor "${FOLDER_PATH}/${NAME}_${SUFFIX}.$EXT"
+    done
+}
+
 declare -A OPTIONS=([1]="single file" [2]="batch folder")
 
 ENTRY_OPTIONS=()
@@ -31,7 +48,7 @@ if [ $SELECTION -eq 1 ];
 then
     single_file
 else
-    echo batch mode to be implemented soon
+    batch
 fi
 
 
